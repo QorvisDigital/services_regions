@@ -1,0 +1,5 @@
+name = Services Regions
+description = Handles Regions support for Services 3.x and later
+dependencies[] = services
+core = 7.x
+version = 7.x-1.x

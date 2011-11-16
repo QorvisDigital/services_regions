@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file: Exposes the Region Rerver to the Services API.
+ */
+
+/**
+ * Implements hook_services_resources().
+ */
+function services_regions_services_resources() {
+  return array(
+    'region' => array(
+      'retrieve' => array(
+        'file' => array('type' => 'inc', 'module' => 'services_regions', 'name' => 'services_regions.resource'),
+        'callback' => '_region_resource_retrieve',
+        'access arguments' => array('view'),
+        'access arguments append' => TRUE,
+        'access callback' => 'region_resource_access',
+        'args' => array(
+         array(
+            'name' => 'path',
+            'optional' => FALSE,
+            'source' => array('param' => 'path'),
+            'type' => 'string',
+            'description' => t('The path of the page you would like to fetch region contents from.')
+          ),
+          array(
+            'name' => 'regions',
+            'optional' => TRUE,
+            'source' => array('param' => 'regions'),
+            'type' => 'array',
+            'description' => t('The (optional) region name(s) that you would like to return, leave blank to return all regions.')
+          )
+        )
+      )
+    )
+  );
+}
+
+/**
+ * Always return true for access, drupal render will handle checks.
+ */
+function region_resource_access()
+{
+  return TRUE;
+}
