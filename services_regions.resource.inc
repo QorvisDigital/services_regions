@@ -16,11 +16,13 @@
   *   Array. A keyed array of regions and their content.
   */
 function _region_resource_retrieve($path, $regions = array()) {
+  if($path == "<front>") {
+    $path = variable_get('site_frontpage', 'node');
+  }
 
   $page = menu_execute_active_handler($path, FALSE);
   
-  if($page == MENU_NOT_FOUND || $page == MENU_ACCESS_DENIED || $page == MENU_SITE_OFFLINE)
-  {
+  if($page == MENU_NOT_FOUND || $page == MENU_ACCESS_DENIED || $page == MENU_SITE_OFFLINE) {
     return array('Error' => '404');
   }
   
@@ -46,15 +48,18 @@ function _region_resource_retrieve($path, $regions = array()) {
   $regiondata = array();
 
   if( !empty($regions)) {
-    foreach($regions as $region)
-    {
+    foreach($regions as $region) {
      if(isset($page[$region])) {
        $regiondata[$region] = drupal_render($page[$region]);
      }
     }
-  }else{
-    $regiondata = $page;
+    
   }
-  
+  else {
+    foreach($page as $section => $element) {
+     $regiondata[$section] = drupal_render($element);
+    }
+  }
+
   return $regiondata;
 }
